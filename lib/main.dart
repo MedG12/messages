@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:another_telephony/telephony.dart';
 import 'dart:async';
 
-import 'package:messages/widgets/pages/conversation_page.dart'; // Required for Future
+import 'package:messages/widgets/pages/conversation_page.dart';
+import 'package:messages/widgets/pages/new_conversation_page.dart'; // Required for Future
 
 void main() {
   runApp(const SmsApp());
@@ -35,6 +36,7 @@ class SmsApp extends StatelessWidget {
           final address = ModalRoute.of(context)!.settings.arguments as String;
           return ConversationPage(address: address);
         },
+        '/new-message': (context) => const NewConversationPage(),
       },
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -69,7 +71,10 @@ class _MessagesHomeState extends State<MessagesHome> {
 
     // 2. Load Conversations if permissions granted
     try {
-      List<SmsMessage> messages = [...(await telephony.getInboxSms()), ...(await telephony.getSentSms())];
+      List<SmsMessage> messages = [
+        ...(await telephony.getInboxSms()),
+        ...(await telephony.getSentSms()),
+      ];
 
       messages.sort((a, b) => b.date!.compareTo(a.date!));
 
@@ -218,6 +223,12 @@ class _MessagesHomeState extends State<MessagesHome> {
           // --- Initial/Default State (should not usually be reached) ---
           return const Center(child: Text("Loading messages..."));
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, '/new-message');
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }
