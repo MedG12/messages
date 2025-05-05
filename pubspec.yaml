@@ -31,7 +31,8 @@ dependencies:
   flutter:
     sdk: flutter
   
-  another_telephony: ^0.4.1
+  another_telephony:
+    path: ./vendor/another_telephony
   flutter_contacts: ^1.1.9+2
   permission_handler: ^12.0.0+1
 
